@@ -1,0 +1,303 @@
+{
+  "last_node_id": 17,
+  "last_link_id": 32,
+  "nodes": [
+    {
+      "id": 3,
+      "type": "PreviewImage",
+      "pos": {
+        "0": 913.2920532226562,
+        "1": 353.52850341796875
+      },
+      "size": {
+        "0": 210,
+        "1": 246
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 2,
+          "label": "图像"
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 2,
+      "type": "LoadImage",
+      "pos": {
+        "0": 307.2921142578125,
+        "1": 162.52877807617188
+      },
+      "size": {
+        "0": 315,
+        "1": 314.00006103515625
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1
+          ],
+          "shape": 3,
+          "label": "图像"
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3,
+          "label": "遮罩"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "1.png",
+        "image"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "Snapload",
+      "pos": {
+        "0": 663.2920532226562,
+        "1": 353.52850341796875
+      },
+      "size": {
+        "0": 210,
+        "1": 54
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "STRING",
+          "link": 3,
+          "widget": {
+            "name": "image"
+          },
+          "label": "image"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2
+          ],
+          "slot_index": 0,
+          "shape": 3,
+          "label": "IMAGE"
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3,
+          "label": "MASK"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Snapload"
+      },
+      "widgets_values": [
+        "123"
+      ]
+    },
+    {
+      "id": 1,
+      "type": "PyQtCanvasNode",
+      "pos": {
+        "0": 653.2920532226562,
+        "1": 163.52877807617188
+      },
+      "size": {
+        "0": 315,
+        "1": 122
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 1,
+          "slot_index": 0,
+          "label": "image"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [],
+          "slot_index": 0,
+          "shape": 3,
+          "label": "IMAGE"
+        },
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": null,
+          "slot_index": 1,
+          "shape": 3,
+          "label": "INT"
+        },
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            3
+          ],
+          "slot_index": 2,
+          "shape": 3,
+          "label": "STRING"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PyQtCanvasNode"
+      },
+      "widgets_values": [
+        867571087443497,
+        "randomize"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      1,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      4,
+      0,
+      3,
+      0,
+      "IMAGE"
+    ],
+    [
+      3,
+      1,
+      2,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      23,
+      10,
+      2,
+      13,
+      1,
+      "VAE"
+    ],
+    [
+      24,
+      10,
+      1,
+      15,
+      0,
+      "CLIP"
+    ],
+    [
+      25,
+      10,
+      1,
+      16,
+      0,
+      "CLIP"
+    ],
+    [
+      26,
+      11,
+      0,
+      5,
+      0,
+      "MODEL"
+    ],
+    [
+      27,
+      10,
+      2,
+      5,
+      1,
+      "VAE"
+    ],
+    [
+      28,
+      10,
+      2,
+      13,
+      1,
+      "VAE"
+    ],
+    [
+      29,
+      10,
+      1,
+      15,
+      0,
+      "CLIP"
+    ],
+    [
+      30,
+      10,
+      1,
+      16,
+      0,
+      "CLIP"
+    ],
+    [
+      31,
+      11,
+      0,
+      5,
+      0,
+      "MODEL"
+    ],
+    [
+      32,
+      10,
+      2,
+      5,
+      1,
+      "VAE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8769226950000005,
+      "offset": [
+        -155.482269502211,
+        130.50066223270278
+      ]
+    }
+  },
+  "version": 0.4
+}

@@ -1,1 +1,1 @@
-torch
+pyqt5
