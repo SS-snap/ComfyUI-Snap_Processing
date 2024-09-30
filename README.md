@@ -1,3 +1,6 @@
+## Update
+#### 我更新了SnapCanvas节点用于可视化创建画布，及拖动/缩放输入图像
+
 ### 简述
 
 ##### 创建这个仓库是没有办法的办法，因为我没有找到一个可以在comfyui中完成面积大小及面积占比化整的节点，所以不得不自己创建一个节点配合我的“Majic product”工作流完成自动化运行
@@ -16,3 +19,12 @@ Clone the repository into your custom node directory
 
 #### 上面的“面积”输出为面积总数，下面的“占比%”输出为所选颜色面积占比化整
 #### The "Area" above is the total area, and the "Proportion%" below is the area percentage of the selected color.
+
+
+#### SnapVanvas nodes
+
+![示例图片](./assets/SnapCanvas.jpg)
+
+在comfyui运行至snapcanvas节点时，阻断工作流，pyqt5界面会自动弹出，你可以设置画布大小并点击set canvas size，也可以利用鼠标滚轮或拖拽图像右下角对输入图像进行缩放。最后点击save and close，阻断关闭，工作流继续运行
+
+When the workflow reaches the SnapCanvas node in ComfyUI, it will pause, and the PyQt5 interface will automatically pop up. You can set the canvas size and click "Set Canvas Size," or use the mouse wheel or drag the bottom-right corner of the input image to scale it. Finally, click "Save and Close," and the workflow will resume.
