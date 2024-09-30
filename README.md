@@ -21,7 +21,7 @@ Clone the repository into your custom node directory
 #### The "Area" above is the total area, and the "Proportion%" below is the area percentage of the selected color.
 
 
-## SnapVanvas nodes
+## SnapCanvas nodes
 
 ![示例图片](./assets/example2.png)
 
