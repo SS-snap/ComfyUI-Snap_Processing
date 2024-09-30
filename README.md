@@ -14,7 +14,7 @@
 克隆仓库到你的自定义节点目录中
 Clone the repository into your custom node directory
 
-### SnapArea nodes
+## SnapArea nodes
 ![示例图片](./assets/example.png)
 
 #### 上面的“面积”输出为面积总数，下面的“占比%”输出为所选颜色面积占比化整
