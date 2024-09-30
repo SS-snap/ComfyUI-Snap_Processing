@@ -23,7 +23,7 @@ Clone the repository into your custom node directory
 
 #### SnapVanvas nodes
 
-![示例图片](./assets/SnapCanvas.jpg)
+![示例图片](./assets/example2.png)
 
 在comfyui运行至snapcanvas节点时，阻断工作流，pyqt5界面会自动弹出，你可以设置画布大小并点击set canvas size，也可以利用鼠标滚轮或拖拽图像右下角对输入图像进行缩放。最后点击save and close，阻断关闭，工作流继续运行
 
