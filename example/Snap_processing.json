@@ -1,0 +1,244 @@
+{
+  "last_node_id": 36,
+  "last_link_id": 39,
+  "nodes": [
+    {
+      "id": 29,
+      "type": "PyQtCanvasNode",
+      "pos": {
+        "0": 1484,
+        "1": 287
+      },
+      "size": {
+        "0": 315,
+        "1": 122
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 33,
+          "label": "image"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": null,
+          "shape": 3,
+          "label": "IMAGE"
+        },
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": null,
+          "shape": 3,
+          "label": "INT"
+        },
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            38
+          ],
+          "slot_index": 2,
+          "shape": 3,
+          "label": "STRING"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PyQtCanvasNode"
+      },
+      "widgets_values": [
+        957347885612995,
+        "randomize"
+      ]
+    },
+    {
+      "id": 34,
+      "type": "Snapload",
+      "pos": {
+        "0": 1486,
+        "1": 479
+      },
+      "size": [
+        210,
+        54
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "STRING",
+          "link": 38,
+          "widget": {
+            "name": "image"
+          },
+          "label": "image"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            39
+          ],
+          "slot_index": 0,
+          "shape": 3,
+          "label": "IMAGE"
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3,
+          "label": "MASK"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Snapload"
+      },
+      "widgets_values": [
+        "请转换为输入并SnapCanvas的string输出"
+      ]
+    },
+    {
+      "id": 35,
+      "type": "PreviewImage",
+      "pos": {
+        "0": 1746,
+        "1": 478
+      },
+      "size": {
+        "0": 210,
+        "1": 246
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 39,
+          "label": "图像"
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": {
+        "0": 1071,
+        "1": 286
+      },
+      "size": [
+        374.88444003954146,
+        358.9410806811363
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            33
+          ],
+          "slot_index": 0,
+          "shape": 3,
+          "label": "图像"
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3,
+          "label": "遮罩"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "R (1).jpg",
+        "image"
+      ]
+    },
+    {
+      "id": 36,
+      "type": "Note",
+      "pos": {
+        "0": 1825,
+        "1": 290
+      },
+      "size": [
+        294.04107481327173,
+        58
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "https://github.com/SS-snap/ComfyUI-Snap_Processing"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    }
+  ],
+  "links": [
+    [
+      33,
+      1,
+      0,
+      29,
+      0,
+      "IMAGE"
+    ],
+    [
+      38,
+      29,
+      2,
+      34,
+      0,
+      "STRING"
+    ],
+    [
+      39,
+      34,
+      0,
+      35,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.061076460950001,
+      "offset": [
+        -549.6248065456915,
+        66.60047903269883
+      ]
+    }
+  },
+  "version": 0.4
+}
