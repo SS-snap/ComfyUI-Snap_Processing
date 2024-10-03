@@ -1,0 +1,14 @@
+[project]
+name = "ComfyUI-Snap_Processing"
+description = "The custom Snap processing node has been converted for ComfyUI production. It currently includes a simple PyQt5 interactive interface as well as practical nodes for basic operations like area calculation.."
+version = "1.0.0"
+license = "LICENSE"
+dependencies = ["pyqt5"]
+
+[project.urls]
+Repository = "https://github.com/SS-snap/ComfyUI-Snap_Processing"
+
+[tool.comfy]
+PublisherId = "SSsnap"
+DisplayName = "ComfyUI-Snap_Processing"
+Icon = ""
