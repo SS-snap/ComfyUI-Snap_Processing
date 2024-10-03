@@ -22,9 +22,14 @@ Clone the repository into your custom node directory
 
 
 ## SnapCanvas nodes
-
+![示例图片](./assets/openart.jpg)
+![示例图片](./assets/newUI.png)
 [Download the video](ComfyUI-Snap_Processing/assets/SP.mp4)
 
 在comfyui运行至snapcanvas节点时，阻断工作流，pyqt5界面会自动弹出，你可以设置画布大小并点击set canvas size，也可以利用鼠标滚轮或拖拽图像右下角对输入图像进行缩放，还可以进行旋转以及拖动图像位置。最后点击save and close，阻断关闭，工作流继续运行
 
 When the workflow reaches the SnapCanvas node in ComfyUI, it will pause, and the PyQt5 interface will automatically pop up. You can set the canvas size and click "Set Canvas Size," or use the mouse wheel or drag the bottom-right corner of the input image to scale it. Finally, click "Save and Close," and the workflow will resume.
+
+找到我
+Wechat:SmartCanvas303
+douyin:SmartCanvas303
