@@ -42,9 +42,8 @@ class PyQtCanvasNode:
             print("Converted QImage to NumPy array")
 
             # Define the save directory
-            save_directory = os.path.join(os.getcwd(), "ComfyUI", "custom_nodes", "Comfyui_Snap-Processing", "save")
-            if not os.path.exists(save_directory):
-                os.makedirs(save_directory)
+            save_directory = os.path.join(os.getcwd(), "ComfyUI", "custom_nodes", "ComfyUI-Snap_Processing", "save")
+
 
             # Create a unique file name using the seed and current timestamp
             timestamp = int(time.time())
