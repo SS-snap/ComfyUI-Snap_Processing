@@ -1,3 +1,5 @@
+# 文件路径: ComfyUI/custom_nodes/ComfyUI-Snap_Processing/ui/canvas_window.py
+
 import os
 import sys
 import time
@@ -6,7 +8,7 @@ from PyQt5.QtWidgets import (
     QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QGraphicsItem, QMessageBox
 )
 from PyQt5.QtGui import QPixmap, QImage, QColor, QPainter, QTransform, QPen
-from PyQt5.QtCore import pyqtSignal, Qt, QRectF
+from PyQt5.QtCore import pyqtSignal, Qt, QRectF, QPointF
 
 
 class CanvasWindow(QDialog):
@@ -21,6 +23,10 @@ class CanvasWindow(QDialog):
         self.canvas_width = canvas_width
         self.canvas_height = canvas_height
         self.modified_image = None
+
+        self.top_left_x = 0
+        self.top_left_y = 0
+        self.scale_factor = 1.0  # 初始缩放倍数
 
         self.scene = QGraphicsScene()
         self.view = QGraphicsView(self.scene)
@@ -39,10 +45,9 @@ class CanvasWindow(QDialog):
         self.scene.addItem(self.canvas_pixmap_item)
 
         # 添加可调整大小和可旋转的输入图像
-        scaled_pixmap = QPixmap.fromImage(self.input_image).scaled(
-            self.canvas_width, self.canvas_height, Qt.KeepAspectRatio, Qt.SmoothTransformation
-        )
-        self.input_pixmap_item = ResizablePixmapItem(scaled_pixmap, self.canvas_width, self.canvas_height)
+        # 直接显示原始尺寸，不进行适应画布
+        original_pixmap = QPixmap.fromImage(self.input_image)
+        self.input_pixmap_item = ResizablePixmapItem(original_pixmap, self.canvas_width, self.canvas_height)
         self.scene.addItem(self.input_pixmap_item)
 
         # 设置旋转锚点为图像中心
@@ -63,6 +68,14 @@ class CanvasWindow(QDialog):
         rotate_button = QPushButton("旋转", self)
         rotate_button.clicked.connect(self.rotate_image)
 
+        scale_label = QLineEdit(self)
+        scale_label.setPlaceholderText("缩放倍数")
+        scale_label.setFixedWidth(100)
+        self.scale_input = scale_label
+
+        scale_button = QPushButton("缩放", self)
+        scale_button.clicked.connect(self.scale_image)
+
         self.canvas_width_input = QLineEdit(self)
         self.canvas_width_input.setPlaceholderText("画布宽度")
         self.canvas_width_input.setText(str(self.canvas_width))
@@ -80,6 +93,8 @@ class CanvasWindow(QDialog):
         hbox.addWidget(size_button)
         hbox.addWidget(self.rotate_input)
         hbox.addWidget(rotate_button)
+        hbox.addWidget(self.scale_input)
+        hbox.addWidget(scale_button)
 
         vbox = QVBoxLayout()
         vbox.addWidget(self.view)
@@ -92,10 +107,10 @@ class CanvasWindow(QDialog):
         self.view.setSceneRect(0, 0, self.canvas_width, self.canvas_height)
 
         # 设置窗口最小大小
-        self.setMinimumSize(400, 300)
+        self.setMinimumSize(600, 400)
 
     def add_canvas_border(self):
-        """添加画布边界线以可视化画布边缘"""
+        """添加画布边界线以可视化画布边缘，但不包含在输出中"""
         pen = QPen(QColor('red'))
         pen.setWidth(2)
         border_rect = QRectF(0, 0, self.canvas_width, self.canvas_height)
@@ -130,13 +145,13 @@ class CanvasWindow(QDialog):
 
         self.modified_image = image
 
-        # 保存路径
-        save_directory = os.path.join(os.getcwd(), "ComfyUI", "custom_nodes", "ComfyUI-Snap_Processing", "save")
+        # 获取图像左上角的坐标
+        top_left_point = self.input_pixmap_item.mapToScene(0, 0)
+        self.top_left_x = int(top_left_point.x())
+        self.top_left_y = int(top_left_point.y())
 
-        timestamp = int(time.time() * 1000)
-        save_path = os.path.join(save_directory, f"output_{timestamp}.png")
-        image.save(save_path)
-        self.save_signal.emit()
+        # 获取缩放倍数
+        self.scale_factor = self.input_pixmap_item.get_current_scale()
 
     def closeEvent(self, event):
         self.close_signal.emit()
@@ -178,8 +193,28 @@ class CanvasWindow(QDialog):
 
         self.input_pixmap_item.rotate_pixmap(angle)
 
+    def scale_image(self):
+        try:
+            scale_factor = float(self.scale_input.text())
+            if scale_factor <= 0:
+                raise ValueError
+        except ValueError:
+            QMessageBox.warning(self, "输入错误", "缩放倍数必须是一个正数。")
+            return
+
+        self.input_pixmap_item.scale_pixmap(scale_factor)
+
     def get_modified_image(self):
         return self.modified_image
+
+    def get_top_left_x(self):
+        return self.top_left_x
+
+    def get_top_left_y(self):
+        return self.top_left_y
+
+    def get_scale_factor(self):
+        return self.scale_factor
 
 
 class ResizablePixmapItem(QGraphicsPixmapItem):
@@ -187,6 +222,8 @@ class ResizablePixmapItem(QGraphicsPixmapItem):
         super().__init__(pixmap)
         self.canvas_width = canvas_width
         self.canvas_height = canvas_height
+        self.original_pixmap = pixmap.copy()  # 保持原始图像的副本
+        self.original_size = pixmap.size()
         self.setFlags(
             QGraphicsItem.ItemIsSelectable |
             QGraphicsItem.ItemIsMovable |
@@ -290,38 +327,18 @@ class ResizablePixmapItem(QGraphicsPixmapItem):
             self.update()
 
     def rotate_pixmap(self, angle):
-        """根据输入角度旋转图像"""
+        """根据输入角度旋转图像，并保持旋转锚点为中心"""
         self.current_rotation = (self.current_rotation + angle) % 360
         self.setRotation(self.current_rotation)
 
+    def scale_pixmap(self, scale_factor):
+        """手动设置缩放倍数"""
+        if scale_factor <= 0:
+            return
+        if self.min_scale <= scale_factor <= self.max_scale:
+            self.current_scale = scale_factor
+            self.setScale(self.current_scale)
+            self.update()
 
-# 示例用法
-def run_pyqt_gui(input_image_path, canvas_width=512, canvas_height=512):
-    app = QApplication(sys.argv)
-
-    input_image = QImage(input_image_path)
-    if input_image.isNull():
-        QMessageBox.critical(None, "加载失败", "无法加载图像。请检查图像路径是否正确。")
-        sys.exit(1)
-
-    dialog = CanvasWindow(input_image, canvas_width, canvas_height)
-    dialog.show()  # 使用 show 而不是 exec_ 以避免阻塞
-
-    # 运行应用程序的事件循环
-    app.exec_()
-
-    modified_image = dialog.get_modified_image()
-    if modified_image:
-        save_directory = os.path.join(os.getcwd(), "ComfyUI", "custom_nodes", "Comfyui-Snap_Processing", "save")
-
-        timestamp = int(time.time() * 1000)
-        save_path = os.path.join(save_directory, f"modified_output_{timestamp}.png")
-        modified_image.save(save_path)
-    else:
-        QMessageBox.information(None, "信息", "没有修改后的图像可用。")
-
-
-if __name__ == "__main__":
-    # 替换为您实际的图像路径
-    image_path = "path_to_your_image.png"  # 请替换为实际图像路径
-    run_pyqt_gui(image_path)
+    def get_current_scale(self):
+        return self.current_scale

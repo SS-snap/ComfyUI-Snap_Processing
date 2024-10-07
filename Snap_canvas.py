@@ -1,85 +1,91 @@
+# 文件路径: ComfyUI/custom_nodes/ComfyUI-Snap_Processing/Snap_canvas.py
+
 from PyQt5.QtCore import QEventLoop
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtGui import QImage
 import time
 import os
-import random
 import torch
 from PIL import Image
 import numpy as np
 from io import BytesIO
 from .ui.canvas_window import CanvasWindow
 
+
 class PyQtCanvasNode:
     @staticmethod
     def INPUT_TYPES():
         return {
             "required": {
-                "image": ("IMAGE",),  # Required image input
+                "image": ("IMAGE",),  # 必需的图像输入
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
             }
         }
 
-    RETURN_TYPES = ("IMAGE", "INT", "STRING")  # Added "STRING" to the return types
+    RETURN_TYPES = ("IMAGE", "INT", "STRING", "INT", "INT", "FLOAT")  # IMAGE, seed, path, x, y, scale_factor
+    RETURN_NAMES = ("image", "seed", "string", "X", "Y", "factor")
     FUNCTION = "activate_pyqt"
     CATEGORY = "Snap Processing"
 
     def activate_pyqt(self, image, seed):
         try:
-            # Use the user-provided seed value
+            # 使用用户提供的种子值
             print(f"Received seed: {seed}")
 
-            # Convert tensor to QImage
+            # 将张量转换为 QImage
             qimage = self.tensor_to_qimage(image)
             print("Converted tensor to QImage")
 
-            # Run PyQt GUI and block the main thread until the user finishes
-            modified_image = self.run_pyqt_gui(qimage)
+            # 运行 PyQt GUI 并阻塞主线程，直到用户完成操作
+            modified_image, x, y, scale_factor = self.run_pyqt_gui(qimage)
             print("PyQt GUI closed")
 
-            # Convert the modified QImage to a NumPy array
+            # 将修改后的 QImage 转换为 NumPy 数组
             numpy_array = self.qimage_to_numpy(modified_image)
             print("Converted QImage to NumPy array")
 
-            # Define the save directory
-            save_directory = os.path.join(os.getcwd(), "ComfyUI", "custom_nodes", "ComfyUI-Snap_Processing", "save")
+            save_directory = os.path.join(os.getcwd(), "canvas")
 
+            # 如果目录不存在，则创建该目录
+            if not os.path.exists(save_directory):
+                os.makedirs(save_directory)
 
-            # Create a unique file name using the seed and current timestamp
-            timestamp = int(time.time())
-            png_image_filename = f"output_image_seed{seed}_{timestamp}.png"
+            # 使用固定文件名 'output.png'
+            png_image_filename = "output.png"
             png_image_path = os.path.join(save_directory, png_image_filename)
+
+            # 保存图像
             self.numpy_to_png(numpy_array, png_image_path)
-            print(f"Saved image to {png_image_path}")
+            print(f"已将图像保存到 {png_image_path}")
 
-            # Get the absolute path for consistency
-            absolute_png_image_path = os.path.abspath(png_image_path)
-
-            # Return the modified image, seed, and the file path
-            return (self.qimage_to_tensor(modified_image), seed, absolute_png_image_path)
+            # 返回修改后的图像和其他参数
+            return (self.qimage_to_tensor(modified_image), seed, png_image_path, x, y, scale_factor)
         except Exception as e:
-            print(f"Error in activate_pyqt: {e}")
+            print(f"激活 PyQt 时出错: {e}")
             raise e
 
     def run_pyqt_gui(self, input_image):
         try:
             app = QApplication.instance()
             if app is None:
-                app = QApplication([])  # Create the global application
+                app = QApplication([])  # 创建全局应用程序
 
-            # Always create a new CanvasWindow instance
+            # 始终创建一个新的 CanvasWindow 实例
             dialog = CanvasWindow(input_image)
             dialog.save_signal.connect(self.on_save)
             dialog.close_signal.connect(self.on_close)
 
             print("PyQt CanvasWindow shown")
-            dialog.exec_()  # Block until the dialog is closed
+            dialog.exec_()  # 阻塞，直到对话框关闭
 
             print("Dialog closed")
             modified_image = dialog.get_modified_image()
-            dialog.deleteLater()  # Ensure the window is properly destroyed
+            x = dialog.get_top_left_x()
+            y = dialog.get_top_left_y()
+            scale_factor = dialog.get_scale_factor()
+            dialog.deleteLater()  # 确保窗口被正确销毁
             print("CanvasWindow deleted")
-            return modified_image
+            return modified_image, x, y, scale_factor
         except Exception as e:
             print(f"Error in run_pyqt_gui: {e}")
             raise e

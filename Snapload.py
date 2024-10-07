@@ -44,7 +44,7 @@ class Snapload:
     def _resolve_path(image) -> Path:
         # 如果未提供图像路径，则使用默认路径
         if not image:
-            default_path = Path("ComfyUI/custom_nodes/ComfyUI-Snap_Processing/save/output.png").resolve()
+            default_path = Path("custom_nodes/ComfyUI-Snap_Processing/save/output.png").resolve()
         else:
             default_path = Path(folder_paths.get_annotated_filepath(image)).resolve()
 
