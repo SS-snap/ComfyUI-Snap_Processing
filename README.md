@@ -1,5 +1,31 @@
 ## Update
-#### 我更新了SnapCanvas节点用于可视化创建画布，及拖动/缩放输入图像
+#### 我更新了SnapCanvas节点用于可视化创建画布，及拖动/缩放输入图像，以及视图整体缩放，并改变了控制逻辑，具体控制逻辑参照窗口中使用方法。
+![示例图片](./assets/help.png)
+### 更新后控制逻辑(Updated control logic)
+缩放视图：
+将鼠标移动到视图区域，滚动鼠标滚轮即可缩放视图。
+Zoom the view:
+Move the mouse to the view area and scroll the mouse wheel to zoom the view.
+
+缩放图像：
+按住 Control 键，将鼠标移动到图像上，滚动鼠标滚轮即可缩放图像。
+Zoom the image:
+Press and hold the Control key, move the mouse to the image, and scroll the mouse wheel to zoom the image.
+
+旋转图像：
+在输入框中输入旋转角度（度数），点击 “旋转” 按钮。
+Rotate the image:
+Enter the rotation angle (degrees) in the input box and click the "Rotate" button.
+
+调整画布大小：
+在对应的输入框中输入画布的宽度和高度，点击 “设置画布大小” 按钮。
+Adjust the canvas size:
+Enter the width and height of the canvas in the corresponding input boxes and click the "Set Canvas Size" button.
+
+保存图像：
+点击 “保存并关闭” 按钮，保存当前的图像并关闭窗口。
+Save the image:
+Click the "Save and Close" button to save the current image and close the window.
 
 ### 简述
 
@@ -24,7 +50,6 @@ Clone the repository into your custom node directory
 ## SnapCanvas nodes
 ![示例图片](./assets/openart.jpg)
 ![示例图片](./assets/newUI.png)
-[Download the video](ComfyUI-Snap_Processing/assets/SP.mp4)
 
 在comfyui运行至snapcanvas节点时，阻断工作流，pyqt5界面会自动弹出，你可以设置画布大小并点击set canvas size，也可以利用鼠标滚轮或拖拽图像右下角对输入图像进行缩放，还可以进行旋转以及拖动图像位置。最后点击save and close，阻断关闭，工作流继续运行
 
