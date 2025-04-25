@@ -9,6 +9,7 @@ dependencies = ["pyqt5"]
 Repository = "https://github.com/SS-snap/ComfyUI-Snap_Processing"
 
 [tool.comfy]
-PublisherId = "SSsnap"
+PublisherId = "snap-demo"
 DisplayName = "ComfyUI-Snap_Processing"
 Icon = ""
+
